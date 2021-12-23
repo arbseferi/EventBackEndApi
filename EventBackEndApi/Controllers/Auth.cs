@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace EventBackEndApi.Controllers
@@ -28,7 +29,7 @@ namespace EventBackEndApi.Controllers
         {
             ResponseMessage ld = new();
             Users u = new();
-            u = _context.Users.Where(x => (x.Email == user.Username_Email && x.Password == user.Password) || (x.Username == user.Username_Email && x.Password == user.Password)).SingleOrDefault();
+            u = _context.Users.Where(x => (x.Email == user.Username_Email && x.Password == Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Password))) || (x.Username == user.Username_Email && x.Password == Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Password)))).SingleOrDefault();
             if(u != null)
             {
                 Guid g = Guid.NewGuid();
