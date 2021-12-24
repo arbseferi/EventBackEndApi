@@ -29,7 +29,17 @@ namespace EventBackEndApi.Controllers
         {
             ResponseMessage ld = new();
             Users u = new();
-            u = _context.Users.Where(x => (x.Email == user.Username_Email && x.Password == Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Password))) || (x.Username == user.Username_Email && x.Password == Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Password)))).SingleOrDefault();
+            try
+            {
+                u = _context.Users.Where(x => (x.Email == user.Username_Email && x.Password == Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Password))) || (x.Username == user.Username_Email && x.Password == Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Password)))).SingleOrDefault();
+            }
+            catch(Exception ex)
+            {
+                ld.statusCode = 401;
+                ld.resFlag = false;
+                ld.msg = ex.Message;
+                return ld;
+            }
             if(u != null)
             {
                 Guid g = Guid.NewGuid();
